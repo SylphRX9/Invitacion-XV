@@ -128,7 +128,6 @@
 </script>
 
 <div class="flash" id="flash"></div>
-
 <audio id="bgMusic" src="Defondo3.mp3" loop></audio>
 
 <div class="container">
@@ -142,7 +141,7 @@
     <div class="paper">
       <p>✨ ¡Has sido invitado a mi fiesta! ✨</p>
       <div>
-        <button class="nav-btn" onclick="prevPage()" id="prev1">Anterior</button>
+        <button class="nav-btn" onclick="prevPage()">Anterior</button>
         <button class="nav-btn" onclick="nextPage()">Siguiente</button>
       </div>
     </div>
@@ -170,7 +169,6 @@
     </div>
   </div>
 
-  <!-- Botón de mute/desmute -->
   <button id="muteBtn">🔇</button>
 </div>
 
@@ -180,27 +178,34 @@ let music=document.getElementById("bgMusic");
 let muted=true;
 let muteBtn=document.getElementById("muteBtn");
 
+// actualizar botones según página
+function updateNavButtons(){
+  document.querySelectorAll(".nav-btn").forEach(btn=>btn.disabled=false);
+  if(currentPage===1) document.querySelector("#page1 .nav-btn[onclick*='prevPage']").disabled=true;
+  if(currentPage===3) document.querySelectorAll("#page3 .nav-btn").forEach(btn=>btn.disabled=true);
+}
+
 function showPage(n){
-  if(n < 0) return; // no se puede ir antes de la primera página
-  if(n > 3) return; // no se puede ir más allá de la última página
+  if(n<1) return; // no antes de la primera hoja
+  if(n>3) return; // no después de la última página
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById("page"+n).classList.add("active");
   currentPage=n;
+  updateNavButtons();
 }
 
 // navegación
 function nextPage(){ showPage(currentPage+1); }
 function prevPage(){ showPage(currentPage-1); }
 
+// abrir invitación
 document.getElementById("openBtn").addEventListener("click",()=>{
   let btn=document.getElementById("openBtn");
   let flash=document.getElementById("flash");
 
-  // mostrar flash
   flash.classList.add("active");
   btn.classList.add("shake");
 
-  // reproducir música
   if(muted){
     music.muted=false;
     muted=false;
@@ -208,17 +213,15 @@ document.getElementById("openBtn").addEventListener("click",()=>{
   }
   music.play();
 
-  // mientras dura el flash, quitar el botón y mostrar hojas
   setTimeout(()=>{
-    btn.style.display="none";  // se quita el botón al empezar el flash
-    showPage(1);               // se muestran las hojas
+    btn.style.display="none";
+    showPage(1);
     btn.classList.remove("shake");
-  }, 100); // casi inmediato pero deja que el flash aparezca
+  }, 100);
 
-  // quitar flash al final
   setTimeout(()=>{
     flash.classList.remove("active");
-  }, 2500); // coincide con duración del flash
+  }, 2500);
 });
 
 // mute/desmute
