@@ -142,7 +142,7 @@
     <div class="paper">
       <p>✨ ¡Has sido invitado a mi fiesta! ✨</p>
       <div>
-        <button class="nav-btn" onclick="prevPage()">Anterior</button>
+        <button class="nav-btn" onclick="prevPage()" id="prev1">Anterior</button>
         <button class="nav-btn" onclick="nextPage()">Siguiente</button>
       </div>
     </div>
@@ -180,27 +180,27 @@ let music=document.getElementById("bgMusic");
 let muted=true;
 let muteBtn=document.getElementById("muteBtn");
 
-// Mostrar página
 function showPage(n){
+  if(n < 0) return; // no se puede ir antes de la primera página
+  if(n > 3) return; // no se puede ir más allá de la última página
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById("page"+n).classList.add("active");
   currentPage=n;
 }
 
-// Navegación
-function nextPage(){ if(currentPage<3) showPage(currentPage+1); }
-function prevPage(){ if(currentPage>0) showPage(currentPage-1); }
+// navegación
+function nextPage(){ showPage(currentPage+1); }
+function prevPage(){ showPage(currentPage-1); }
 
-// Abrir invitación con flash y música
 document.getElementById("openBtn").addEventListener("click",()=>{
   let btn=document.getElementById("openBtn");
+  let flash=document.getElementById("flash");
+
+  // mostrar flash
+  flash.classList.add("active");
   btn.classList.add("shake");
-  document.getElementById("flash").classList.add("active");
 
-  // Oculta inmediatamente el botón
-  btn.style.display="none";
-
-  // Activa la música
+  // reproducir música
   if(muted){
     music.muted=false;
     muted=false;
@@ -208,15 +208,20 @@ document.getElementById("openBtn").addEventListener("click",()=>{
   }
   music.play();
 
-  // Espera a que termine el flash para mostrar invitación
+  // mientras dura el flash, quitar el botón y mostrar hojas
   setTimeout(()=>{
-    document.getElementById("page0").style.display="none";
-    showPage(1);
+    btn.style.display="none";  // se quita el botón al empezar el flash
+    showPage(1);               // se muestran las hojas
     btn.classList.remove("shake");
-  },2500);
+  }, 100); // casi inmediato pero deja que el flash aparezca
+
+  // quitar flash al final
+  setTimeout(()=>{
+    flash.classList.remove("active");
+  }, 2500); // coincide con duración del flash
 });
 
-// Botón mute/desmute
+// mute/desmute
 muteBtn.addEventListener("click",()=>{
   if(muted){
     music.muted=false;
