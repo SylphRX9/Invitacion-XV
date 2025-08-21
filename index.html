@@ -1,177 +1,237 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invitación XV</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: 'Arial', sans-serif;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Invitación • XV Años</title>
+<style>
+  :root{
+    --gold1:#b8860b;
+    --gold2:#ffd700;
+    --paper:#fffaf3;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Poppins", system-ui, sans-serif;
+    background:#0b0f1a;
+    color:#1f2937;
+    overflow:hidden;
+  }
 
-    /* Fondo dorado con degradado */
-    body {
-      background: radial-gradient(circle at center, #ffd700, #b8860b, #000);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      color: white;
-      text-align: center;
-    }
+  /* ====== CAPAS ====== */
+  #bgStars, #goldGlows {
+    position:fixed; inset:0; pointer-events:none;
+    width:100%; height:100%;
+  }
+  #bgStars{ z-index:0; }
+  #goldGlows{ z-index:0; }
 
-    /* Estrellitas */
-    .estrella {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      background: white;
-      border-radius: 50%;
-      animation: brillar 2s infinite alternate;
-    }
+  /* ====== CENTRO ====== */
+  .center{
+    position:fixed; inset:0; z-index:2;
+    display:grid; place-items:center; padding:20px;
+  }
+  #intro{ text-align:center; }
+  #emojiSobre{
+    font-size:100px; line-height:1; display:block;
+    filter: drop-shadow(0 10px 24px rgba(0,0,0,.35));
+  }
+  .btn{
+    margin-top:16px; padding:14px 28px;
+    border:none; border-radius:28px;
+    font-size:18px; font-weight:800; cursor:pointer;
+    background: linear-gradient(135deg, var(--gold2), var(--gold1));
+    color:#3b2a00;
+    box-shadow:0 12px 28px rgba(255,215,0,.25);
+    text-transform:uppercase;
+  }
 
-    @keyframes brillar {
-      from { opacity: 0.2; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1.5); }
-    }
+  /* Shake */
+  .shake{ animation: shake .6s ease; }
+  .screenShake{ animation: screen-shake .5s ease; }
+  @keyframes shake{
+    25%{ transform: translateX(-8px) rotate(-6deg) }
+    50%{ transform: translateX(8px) rotate(6deg) }
+    75%{ transform: translateX(-6px) rotate(-4deg) }
+  }
+  @keyframes screen-shake{
+    25%{ transform: translate(-8px,4px) }
+    50%{ transform: translate(6px,-6px) }
+    75%{ transform: translate(-4px,3px) }
+  }
 
-    /* Botón inicial */
-    #abrir {
-      background: transparent;
-      border: none;
-      font-size: 2rem;
-      cursor: pointer;
-      color: white;
-    }
+  /* Flash */
+  #flash{
+    position:fixed; inset:0; background:white;
+    opacity:0; z-index:3; pointer-events:none;
+    transition: opacity 1s ease;
+  }
+  #flash.mostrar{ opacity:1; }
 
-    /* Shake */
-    .shake {
-      animation: shake 0.5s;
-    }
+  /* Páginas */
+  #paginas{ display:none; }
+  .hoja{
+    width:min(92vw,760px);
+    background:var(--paper);
+    border-radius:20px;
+    padding:28px 24px;
+    box-shadow:0 18px 46px rgba(0,0,0,.25);
+    text-align:center;
+  }
+  .titulo{ font-size:28px; font-weight:900; margin:0 0 10px; }
+  .sub{ margin:0 0 10px; color:#4b5563; }
+  .navegacion{ margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .navbtn{
+    padding:10px 18px; border:none; border-radius:999px; cursor:pointer; font-weight:800;
+    background:#111827; color:#fff;
+  }
 
-    @keyframes shake {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(-5px, 5px); }
-      50% { transform: translate(5px, -5px); }
-      75% { transform: translate(-5px, -5px); }
-      100% { transform: translate(0, 0); }
-    }
+  /* Botón mute */
+  #muteBtn{
+    position:fixed; top:12px; right:12px;
+    z-index:5; background:#111827; color:white;
+    border:none; padding:8px 14px; border-radius:20px;
+    font-size:14px; cursor:pointer;
+  }
 
-    /* Flash */
-    .flash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: white;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .activeFlash {
-      animation: flashAnim 1s forwards;
-    }
-
-    @keyframes flashAnim {
-      0% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    /* Hojas */
-    .hoja {
-      display: none;
-      background: rgba(255,255,255,0.9);
-      padding: 20px;
-      border-radius: 12px;
-      color: black;
-      width: 90%;
-      max-width: 400px;
-      margin: auto;
-    }
-
-    .hoja.active {
-      display: block;
-    }
-
-    button.nav {
-      margin: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      background: gold;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-  </style>
+  @media(max-width:560px){
+    #emojiSobre{ font-size:80px; }
+    .titulo{ font-size:24px; }
+  }
+</style>
 </head>
 <body>
-  <!-- Estrellitas dinámicas -->
-  <div id="estrellas"></div>
 
-  <!-- Botón inicial -->
-  <button id="abrir">📩 Abrir invitación</button>
+<!-- Fondo estrellas -->
+<svg id="bgStars" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+  <defs>
+    <radialGradient id="goldGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#fff8d6" stop-opacity=".95"/>
+      <stop offset="40%" stop-color="#ffeaa7" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .twinkle{ animation: tw 2.2s infinite alternate; }
+      @keyframes tw{ from{opacity:.3} to{opacity:1; transform:scale(1.4);} }
+    </style>
+  </defs>
+  <g fill="#fff">
+    <circle cx="120" cy="80" r="1.2" class="twinkle"/>
+    <circle cx="420" cy="140" r="1.1"/>
+    <circle cx="800" cy="200" r="1.3" class="twinkle"/>
+    <circle cx="200" cy="500" r="1.2"/>
+    <circle cx="700" cy="600" r="1.3" class="twinkle"/>
+    <circle cx="900" cy="850" r="1.1"/>
+  </g>
+  <g opacity=".5">
+    <circle cx="200" cy="200" r="100" fill="url(#goldGlow)"/>
+    <circle cx="800" cy="700" r="130" fill="url(#goldGlow)"/>
+  </g>
+</svg>
 
-  <!-- Flash -->
-  <div id="flash" class="flash"></div>
+<!-- Brillos dorados flotantes -->
+<svg id="goldGlows" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+  <defs>
+    <radialGradient id="gSoft">
+      <stop offset="0%" stop-color="#fff4c1" stop-opacity=".9"/>
+      <stop offset="60%" stop-color="#ffd700" stop-opacity=".25"/>
+      <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .floatGlow{ animation: drift 18s infinite alternate; }
+      @keyframes drift{ from{transform:translate(0,0);} to{transform:translate(30px,-24px);} }
+    </style>
+  </defs>
+  <circle class="floatGlow" cx="180" cy="880" r="90" fill="url(#gSoft)" />
+  <circle class="floatGlow" cx="920" cy="240" r="80" fill="url(#gSoft)" />
+</svg>
 
-  <!-- Hojas -->
-  <div id="hoja1" class="hoja">
-    <h2>¡Has sido invitado a mi fiesta!</h2>
-    <button class="nav" onclick="mostrarHoja(2)">Siguiente ➡️</button>
+<!-- Botón mute -->
+<button id="muteBtn">🔊</button>
+<audio id="bgMusic" loop>
+  <source src="Defondo3.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Intro -->
+<div class="center" id="intro">
+  <div>
+    <span id="emojiSobre">✉️</span>
+    <button class="btn" id="abrirBtn">Abrir invitación</button>
   </div>
+</div>
 
-  <div id="hoja2" class="hoja">
-    <h2>Ubicación</h2>
-    <a href="https://www.google.com/maps" target="_blank">
-      <button class="nav">Ver en Google Maps</button>
-    </a>
-    <button class="nav" onclick="mostrarHoja(1)">⬅️ Anterior</button>
-    <button class="nav" onclick="mostrarHoja(3)">Siguiente ➡️</button>
+<!-- Flash -->
+<div id="flash"></div>
+
+<!-- Páginas -->
+<div class="center" id="paginas">
+  <div class="hoja" id="hoja1">
+    <h2 class="titulo">¡Has sido invitado a mi fiesta!</h2>
+    <p class="sub">Acompáñame a celebrar mis XV Años ✨</p>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(2)">Siguiente ➜</button>
+    </div>
   </div>
-
-  <div id="hoja3" class="hoja">
-    <h2>¡Te esperamos!</h2>
-    <button class="nav" onclick="mostrarHoja(2)">⬅️ Anterior</button>
+  <div class="hoja" id="hoja2" style="display:none">
+    <h2 class="titulo">📍 Ubicación</h2>
+    <p class="sub">Da clic para abrir en Google Maps</p>
+    <button class="navbtn" onclick="window.open('https://www.google.com/maps','_blank')">Ver mapa</button>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(1)">⬅ Anterior</button>
+      <button class="navbtn" onclick="mostrarPagina(3)">Siguiente ➜</button>
+    </div>
   </div>
+  <div class="hoja" id="hoja3" style="display:none">
+    <h2 class="titulo">✨ ¡Te esperamos! ✨</h2>
+    <p class="sub">Gracias por ser parte de este momento especial</p>
+    <div class="navegacion">
+      <button class="navbtn" onclick="mostrarPagina(2)">⬅ Anterior</button>
+    </div>
+  </div>
+</div>
 
-  <script>
-    const abrirBtn = document.getElementById("abrir");
-    const flash = document.getElementById("flash");
-    let hojaActual = 0;
+<script>
+  const abrirBtn=document.getElementById('abrirBtn');
+  const emojiSobre=document.getElementById('emojiSobre');
+  const intro=document.getElementById('intro');
+  const flash=document.getElementById('flash');
+  const paginas=document.getElementById('paginas');
+  const music=document.getElementById('bgMusic');
+  const muteBtn=document.getElementById('muteBtn');
 
-    abrirBtn.addEventListener("click", () => {
-      abrirBtn.classList.add("shake");
-      document.body.classList.add("shake");
-      flash.classList.add("activeFlash");
+  abrirBtn.addEventListener('click', ()=>{
+    emojiSobre.classList.add('shake');
+    document.body.classList.add('screenShake');
+    setTimeout(()=>{ emojiSobre.classList.remove('shake'); document.body.classList.remove('screenShake'); },650);
+    setTimeout(()=>{
+      flash.classList.add('mostrar');
+      setTimeout(()=>{
+        flash.classList.remove('mostrar');
+        intro.style.display='none';
+        paginas.style.display='grid';
+        mostrarPagina(1);
+        music.play().catch(()=>{}); // iniciar música
+      },900);
+    },250);
+  });
 
-      setTimeout(() => {
-        abrirBtn.style.display = "none";
-        mostrarHoja(1);
-      }, 1000);
+  function mostrarPagina(n){
+    [1,2,3].forEach(i=>{
+      document.getElementById('hoja'+i).style.display=(i===n)?'block':'none';
     });
+  }
 
-    function mostrarHoja(num) {
-      document.querySelectorAll(".hoja").forEach(h => h.classList.remove("active"));
-      document.getElementById("hoja" + num).classList.add("active");
-      hojaActual = num;
+  muteBtn.addEventListener('click',()=>{
+    if(music.muted){
+      music.muted=false;
+      muteBtn.textContent='🔊';
+    } else {
+      music.muted=true;
+      muteBtn.textContent='🔇';
     }
-
-    // Crear estrellitas random
-    const estrellas = document.getElementById("estrellas");
-    for (let i = 0; i < 80; i++) {
-      let star = document.createElement("div");
-      star.classList.add("estrella");
-      star.style.top = Math.random() * 100 + "vh";
-      star.style.left = Math.random() * 100 + "vw";
-      star.style.animationDuration = (1 + Math.random() * 2) + "s";
-      estrellas.appendChild(star);
-    }
-  </script>
+  });
+</script>
 </body>
 </html>
