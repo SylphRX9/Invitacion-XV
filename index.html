@@ -25,12 +25,12 @@
     border-radius:50%;
     background:radial-gradient(circle, var(--gold2), transparent);
     opacity:0.8;
-    animation: float 10s linear infinite;
+    animation: float 8s linear infinite;
   }
   @keyframes float{
-    from{ transform:translateY(100vh) scale(0.5); opacity:0; }
+    from{ transform:translateY(0) scale(0.5); opacity:0.4; }
     50%{ opacity:1; }
-    to{ transform:translateY(-10vh) scale(1); opacity:0; }
+    to{ transform:translateY(-40px) scale(1); opacity:0.4; }
   }
 
   .container{
@@ -97,23 +97,35 @@
     align-items:center;
     justify-content:center;
     height:100%;
-    color:#fff;
+    color:#333;
     font-size:24px;
+    padding:20px;
   }
   .page.active{display:flex;}
 
+  /* papel elegante */
+  .paper{
+    background:var(--paper);
+    border-radius:20px;
+    padding:30px;
+    max-width:90%;
+    width:500px;
+    box-shadow:0 0 25px rgba(255,215,0,0.4);
+    text-align:center;
+  }
 </style>
 </head>
 <body>
   <!-- puntitos brillantes -->
   <script>
-    for(let i=0;i<30;i++){
+    for(let i=0;i<60;i++){ // más puntitos
       let s=document.createElement("div");
       s.className="sparkle";
-      let size=Math.random()*6+4;
+      let size=Math.random()*6+3;
       s.style.width=s.style.height=size+"px";
       s.style.left=Math.random()*100+"vw";
-      s.style.animationDuration=(6+Math.random()*6)+"s";
+      s.style.top=Math.random()*100+"vh"; // ahora dispersos en toda la pantalla
+      s.style.animationDuration=(6+Math.random()*8)+"s";
       document.body.appendChild(s);
     }
   </script>
@@ -128,29 +140,35 @@
 
     <!-- Página 1 -->
     <div class="page" id="page1">
-      <p>¡Has sido invitado a mi fiesta!</p>
-      <div>
-        <button class="nav-btn" onclick="prevPage()">Anterior</button>
-        <button class="nav-btn" onclick="nextPage()">Siguiente</button>
+      <div class="paper">
+        <p>¡Has sido invitado a mi fiesta!</p>
+        <div>
+          <button class="nav-btn" onclick="prevPage()">Anterior</button>
+          <button class="nav-btn" onclick="nextPage()">Siguiente</button>
+        </div>
       </div>
     </div>
 
     <!-- Página 2 -->
     <div class="page" id="page2">
-      <p>Ubicación</p>
-      <a href="https://www.google.com/maps" target="_blank">
-        <button class="nav-btn">Ver en Google Maps</button>
-      </a>
-      <div>
-        <button class="nav-btn" onclick="prevPage()">Anterior</button>
-        <button class="nav-btn" onclick="nextPage()">Siguiente</button>
+      <div class="paper">
+        <p>Ubicación</p>
+        <a href="https://www.google.com/maps" target="_blank">
+          <button class="nav-btn">Ver en Google Maps</button>
+        </a>
+        <div>
+          <button class="nav-btn" onclick="prevPage()">Anterior</button>
+          <button class="nav-btn" onclick="nextPage()">Siguiente</button>
+        </div>
       </div>
     </div>
 
     <!-- Página 3 -->
     <div class="page" id="page3">
-      <p>¡Te esperamos!</p>
-      <button class="nav-btn" onclick="prevPage()">Anterior</button>
+      <div class="paper">
+        <p>¡Te esperamos!</p>
+        <button class="nav-btn" onclick="prevPage()">Anterior</button>
+      </div>
     </div>
   </div>
 
