@@ -15,244 +15,161 @@
   body{
     margin:0;
     font-family: "Poppins", system-ui, sans-serif;
-    background:#0b0f1a;
-    color:#1f2937;
+    background:#0b0f1a; /* fondo oscuro elegante */
     overflow:hidden;
   }
 
-  /* ====== CAPAS ====== */
-  #bgStars{
-    position:fixed; inset:0; pointer-events:none;
-    width:100%; height:100%; z-index:0;
+  /* animación de puntitos brillantes */
+  .sparkle{
+    position:absolute;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--gold2), transparent);
+    opacity:0.8;
+    animation: float 10s linear infinite;
+  }
+  @keyframes float{
+    from{ transform:translateY(100vh) scale(0.5); opacity:0; }
+    50%{ opacity:1; }
+    to{ transform:translateY(-10vh) scale(1); opacity:0; }
   }
 
-  /* ====== CENTRO ====== */
-  .center{
-    position:fixed; inset:0; z-index:2;
-    display:grid; place-items:center; padding:20px;
-  }
-  #intro{ text-align:center; }
-  #emojiSobre{
-    font-size:100px; line-height:1; display:block;
-    filter: drop-shadow(0 10px 24px rgba(0,0,0,.35));
-  }
-  .btn{
-    margin-top:16px; padding:14px 28px;
-    border:none; border-radius:28px;
-    font-size:18px; font-weight:800; cursor:pointer;
-    background: linear-gradient(135deg, var(--gold2), var(--gold1));
-    color:#3b2a00;
-    box-shadow:0 12px 28px rgba(255,215,0,.25);
-    text-transform:uppercase;
-  }
-
-  /* Shake */
-  .shake{ animation: shake .6s ease; }
-  .screenShake{ animation: screen-shake .5s ease; }
-  @keyframes shake{
-    25%{ transform: translateX(-8px) rotate(-6deg) }
-    50%{ transform: translateX(8px) rotate(6deg) }
-    75%{ transform: translateX(-6px) rotate(-4deg) }
-  }
-  @keyframes screen-shake{
-    25%{ transform: translate(-8px,4px) }
-    50%{ transform: translate(6px,-6px) }
-    75%{ transform: translate(-4px,3px) }
-  }
-
-  /* Flash */
-  #flash{
-    position:fixed; inset:0; background:white;
-    opacity:0; z-index:3; pointer-events:none;
-    transition: opacity 1s ease;
-  }
-  #flash.mostrar{ opacity:1; }
-
-  /* Páginas */
-  #paginas{ display:none; }
-  .hoja{
-    width:min(92vw,760px);
-    background:var(--paper);
-    border-radius:20px;
-    padding:28px 24px;
-    box-shadow:0 18px 46px rgba(0,0,0,.25);
+  .container{
+    position:relative;
+    z-index:2;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
     text-align:center;
-  }
-  .titulo{ font-size:28px; font-weight:900; margin:0 0 10px; }
-  .sub{ margin:0 0 10px; color:#4b5563; }
-  .navegacion{ margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-  .navbtn{
-    padding:10px 18px; border:none; border-radius:999px; cursor:pointer; font-weight:800;
-    background:#111827; color:#fff;
+    padding:20px;
   }
 
-  /* Botón mute */
-  #muteBtn{
-    position:fixed; top:12px; right:12px;
-    z-index:5; background:#111827; color:white;
-    border:none; padding:8px 14px; border-radius:20px;
-    font-size:14px; cursor:pointer;
+  .open-btn, .nav-btn{
+    background:linear-gradient(45deg,var(--gold1),var(--gold2));
+    border:none;
+    color:#fff;
+    padding:15px 30px;
+    margin:15px;
+    border-radius:30px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 0 15px var(--gold2);
+    transition:transform 0.2s;
+  }
+  .open-btn:hover, .nav-btn:hover{
+    transform:scale(1.05);
   }
 
-  @media(max-width:560px){
-    #emojiSobre{ font-size:80px; }
-    .titulo{ font-size:24px; }
+  .shake{
+    animation:shake 0.5s;
   }
+  @keyframes shake{
+    0%{transform:translate(0,0);}
+    20%{transform:translate(-10px,0);}
+    40%{transform:translate(10px,0);}
+    60%{transform:translate(-10px,0);}
+    80%{transform:translate(10px,0);}
+    100%{transform:translate(0,0);}
+  }
+
+  .flash{
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    background:white;
+    opacity:0;
+    z-index:5;
+    pointer-events:none;
+  }
+  .flash.active{
+    animation:flashAnim 1s forwards;
+  }
+  @keyframes flashAnim{
+    0%{opacity:1;}
+    100%{opacity:0;}
+  }
+
+  .page{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+    color:#fff;
+    font-size:24px;
+  }
+  .page.active{display:flex;}
+
 </style>
 </head>
 <body>
+  <!-- puntitos brillantes -->
+  <script>
+    for(let i=0;i<30;i++){
+      let s=document.createElement("div");
+      s.className="sparkle";
+      let size=Math.random()*6+4;
+      s.style.width=s.style.height=size+"px";
+      s.style.left=Math.random()*100+"vw";
+      s.style.animationDuration=(6+Math.random()*6)+"s";
+      document.body.appendChild(s);
+    }
+  </script>
 
-<!-- ====== FONDO: ESTRELLAS DE 5 PUNTAS (TODO SVG, SIN BOLAS DIFUMINADAS) ====== -->
-<svg id="bgStars" viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
-  <defs>
-    <!-- Estrella de 5 puntas (como dibujada a mano) -->
-    <symbol id="estrella" viewBox="0 0 100 100">
-      <polygon points="50,4 61,35 95,35 67,55 78,88 50,70 22,88 33,55 5,35 39,35"
-               fill="#ffd700" stroke="#b8860b" stroke-width="3" stroke-linejoin="round"/>
-    </symbol>
-    <style>
-      /* Parpadeo sutil */
-      .tw{ animation: twinkle 2.8s ease-in-out infinite; transform-origin:center; }
-      .tw2{ animation: twinkle 3.6s ease-in-out infinite .8s; }
-      .tw3{ animation: twinkle 4.4s ease-in-out infinite 1.4s; }
-      @keyframes twinkle{
-        0%,100%{ opacity:.75; transform:scale(1); }
-        50%{ opacity:1; transform:scale(1.12); }
-      }
-      /* Flotación vertical suave */
-      .float1{ animation: floatY 14s ease-in-out infinite; }
-      .float2{ animation: floatY 18s ease-in-out infinite 2s; }
-      .float3{ animation: floatY 22s ease-in-out infinite 4s; }
-      @keyframes floatY{
-        0%{ transform: translateY(0px) }
-        50%{ transform: translateY(-32px) }
-        100%{ transform: translateY(0px) }
-      }
-      /* Pequeñas estrellas blancas simples para llenar */
-      .dot{ fill:#fff; opacity:.9; }
-      .dot.twinkleSmall{ animation: t2 2.2s ease-in-out infinite; transform-origin:center; }
-      @keyframes t2{ 0%,100%{opacity:.5; transform:scale(1);} 50%{opacity:1; transform:scale(1.5);} }
-    </style>
-  </defs>
+  <div class="flash" id="flash"></div>
 
-  <!-- Estrellas GRANDES (flotando) -->
-  <g class="float1">
-    <use href="#estrella" x="60"   y="60"   width="90" height="90" class="tw"/>
-    <use href="#estrella" x="760"  y="120"  width="110" height="110" class="tw2"/>
-  </g>
+  <div class="container">
+    <!-- Página 0: portada -->
+    <div class="page active" id="page0">
+      <button class="open-btn" id="openBtn">📩 Abrir invitación</button>
+    </div>
 
-  <!-- Estrellas MEDIANAS (flotando) -->
-  <g class="float2">
-    <use href="#estrella" x="220"  y="320" width="70" height="70" class="tw"/>
-    <use href="#estrella" x="520"  y="420" width="80" height="80" class="tw3"/>
-    <use href="#estrella" x="860"  y="560" width="72" height="72" class="tw2"/>
-  </g>
+    <!-- Página 1 -->
+    <div class="page" id="page1">
+      <p>¡Has sido invitado a mi fiesta!</p>
+      <div>
+        <button class="nav-btn" onclick="prevPage()">Anterior</button>
+        <button class="nav-btn" onclick="nextPage()">Siguiente</button>
+      </div>
+    </div>
 
-  <!-- Estrellas PEQUEÑAS (flotando) -->
-  <g class="float3">
-    <use href="#estrella" x="120"  y="700" width="52" height="52" class="tw2"/>
-    <use href="#estrella" x="360"  y="820" width="48" height="48" class="tw3"/>
-    <use href="#estrella" x="640"  y="740" width="56" height="56" class="tw"/>
-    <use href="#estrella" x="920"  y="260" width="50" height="50" class="tw2"/>
-  </g>
+    <!-- Página 2 -->
+    <div class="page" id="page2">
+      <p>Ubicación</p>
+      <a href="https://www.google.com/maps" target="_blank">
+        <button class="nav-btn">Ver en Google Maps</button>
+      </a>
+      <div>
+        <button class="nav-btn" onclick="prevPage()">Anterior</button>
+        <button class="nav-btn" onclick="nextPage()">Siguiente</button>
+      </div>
+    </div>
 
-  <!-- Puntitos blancos tipo estrellas lejanas -->
-  <g>
-    <circle class="dot twinkleSmall" cx="100" cy="150" r="1.4"/>
-    <circle class="dot" cx="300" cy="400" r="1.2"/>
-    <circle class="dot twinkleSmall" cx="600" cy="250" r="1.5"/>
-    <circle class="dot" cx="850" cy="600" r="1.2"/>
-    <circle class="dot twinkleSmall" cx="400" cy="820" r="1.4"/>
-    <circle class="dot" cx="750" cy="920" r="1.2"/>
-    <circle class="dot" cx="80"  cy="900" r="1.2"/>
-    <circle class="dot twinkleSmall" cx="950" cy="120" r="1.4"/>
-  </g>
-</svg>
-
-<!-- Botón mute -->
-<button id="muteBtn">🔊</button>
-<audio id="bgMusic" loop>
-  <source src="Defondo3.mp3" type="audio/mpeg">
-</audio>
-
-<!-- Intro -->
-<div class="center" id="intro">
-  <div>
-    <span id="emojiSobre">✉️</span>
-    <button class="btn" id="abrirBtn">Abrir invitación</button>
-  </div>
-</div>
-
-<!-- Flash -->
-<div id="flash"></div>
-
-<!-- Páginas -->
-<div class="center" id="paginas">
-  <div class="hoja" id="hoja1">
-    <h2 class="titulo">¡Has sido invitado a mi fiesta!</h2>
-    <p class="sub">Acompáñame a celebrar mis XV Años ✨</p>
-    <div class="navegacion">
-      <button class="navbtn" onclick="mostrarPagina(2)">Siguiente ➜</button>
+    <!-- Página 3 -->
+    <div class="page" id="page3">
+      <p>¡Te esperamos!</p>
+      <button class="nav-btn" onclick="prevPage()">Anterior</button>
     </div>
   </div>
-  <div class="hoja" id="hoja2" style="display:none">
-    <h2 class="titulo">📍 Ubicación</h2>
-    <p class="sub">Da clic para abrir en Google Maps</p>
-    <button class="navbtn" onclick="window.open('https://www.google.com/maps','_blank')">Ver mapa</button>
-    <div class="navegacion">
-      <button class="navbtn" onclick="mostrarPagina(1)">⬅ Anterior</button>
-      <button class="navbtn" onclick="mostrarPagina(3)">Siguiente ➜</button>
-    </div>
-  </div>
-  <div class="hoja" id="hoja3" style="display:none">
-    <h2 class="titulo">✨ ¡Te esperamos! ✨</h2>
-    <p class="sub">Gracias por ser parte de este momento especial</p>
-    <div class="navegacion">
-      <button class="navbtn" onclick="mostrarPagina(2)">⬅ Anterior</button>
-    </div>
-  </div>
-</div>
 
 <script>
-  const abrirBtn=document.getElementById('abrirBtn');
-  const emojiSobre=document.getElementById('emojiSobre');
-  const intro=document.getElementById('intro');
-  const flash=document.getElementById('flash');
-  const paginas=document.getElementById('paginas');
-  const music=document.getElementById('bgMusic');
-  const muteBtn=document.getElementById('muteBtn');
+let currentPage=0;
+function showPage(n){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+  currentPage=n;
+}
+function nextPage(){ if(currentPage<3) showPage(currentPage+1); }
+function prevPage(){ if(currentPage>0) showPage(currentPage-1); }
 
-  abrirBtn.addEventListener('click', ()=>{
-    emojiSobre.classList.add('shake');
-    document.body.classList.add('screenShake');
-    setTimeout(()=>{ emojiSobre.classList.remove('shake'); document.body.classList.remove('screenShake'); },650);
-    setTimeout(()=>{
-      flash.classList.add('mostrar');
-      setTimeout(()=>{
-        flash.classList.remove('mostrar');
-        intro.style.display='none';
-        paginas.style.display='grid';
-        mostrarPagina(1);
-        music.play().catch(()=>{}); // iniciar música
-      },900);
-    },250);
-  });
-
-  function mostrarPagina(n){
-    [1,2,3].forEach(i=>{
-      document.getElementById('hoja'+i).style.display=(i===n)?'block':'none';
-    });
-  }
-
-  muteBtn.addEventListener('click',()=>{
-    if(music.muted){
-      music.muted=false;
-      muteBtn.textContent='🔊';
-    } else {
-      music.muted=true;
-      muteBtn.textContent='🔇';
-    }
-  });
+document.getElementById("openBtn").addEventListener("click",()=>{
+  let btn=document.getElementById("openBtn");
+  btn.classList.add("shake");
+  document.getElementById("flash").classList.add("active");
+  setTimeout(()=>{showPage(1); btn.classList.remove("shake");},1000);
+});
 </script>
 </body>
 </html>
