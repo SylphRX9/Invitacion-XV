@@ -84,7 +84,7 @@
     pointer-events:none;
   }
   .flash.active{
-    animation:flashAnim 1s forwards;
+    animation:flashAnim 3s forwards; /* ahora 3 segundos */
   }
   @keyframes flashAnim{
     0%{opacity:1;}
@@ -124,7 +124,7 @@
       let size=Math.random()*6+3;
       s.style.width=s.style.height=size+"px";
       s.style.left=Math.random()*100+"vw";
-      s.style.top=Math.random()*100+"vh"; // ahora dispersos en toda la pantalla
+      s.style.top=Math.random()*100+"vh"; // dispersos en toda la pantalla
       s.style.animationDuration=(6+Math.random()*8)+"s";
       document.body.appendChild(s);
     }
@@ -141,7 +141,7 @@
     <!-- Página 1 -->
     <div class="page" id="page1">
       <div class="paper">
-        <p>¡Has sido invitado a mi fiesta!</p>
+        <p>✨ ¡Has sido invitado a mi fiesta! ✨</p>
         <div>
           <button class="nav-btn" onclick="prevPage()">Anterior</button>
           <button class="nav-btn" onclick="nextPage()">Siguiente</button>
@@ -152,9 +152,9 @@
     <!-- Página 2 -->
     <div class="page" id="page2">
       <div class="paper">
-        <p>Ubicación</p>
+        <p>📍 Ubicación del evento</p>
         <a href="https://www.google.com/maps" target="_blank">
-          <button class="nav-btn">Ver en Google Maps</button>
+          <button class="nav-btn">🌐 Ver en Google Maps</button>
         </a>
         <div>
           <button class="nav-btn" onclick="prevPage()">Anterior</button>
@@ -166,7 +166,7 @@
     <!-- Página 3 -->
     <div class="page" id="page3">
       <div class="paper">
-        <p>¡Te esperamos!</p>
+        <p>🎉 ¡Te esperamos con mucha alegría! 💖</p>
         <button class="nav-btn" onclick="prevPage()">Anterior</button>
       </div>
     </div>
@@ -186,7 +186,7 @@ document.getElementById("openBtn").addEventListener("click",()=>{
   let btn=document.getElementById("openBtn");
   btn.classList.add("shake");
   document.getElementById("flash").classList.add("active");
-  setTimeout(()=>{showPage(1); btn.classList.remove("shake");},1000);
+  setTimeout(()=>{showPage(1); btn.classList.remove("shake");},3000); // espera 3s
 });
 </script>
 </body>
