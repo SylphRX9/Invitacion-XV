@@ -106,46 +106,38 @@
 
 <!-- Fondo estrellas -->
 <svg id="bgStars" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-  <defs>
-    <radialGradient id="goldGlow" cx="50%" cy="50%">
-      <stop offset="0%" stop-color="#fff8d6" stop-opacity=".95"/>
-      <stop offset="40%" stop-color="#ffeaa7" stop-opacity=".35"/>
-      <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
-    </radialGradient>
-    <style>
-      .twinkle{ animation: tw 2.2s infinite alternate; }
-      @keyframes tw{ from{opacity:.3} to{opacity:1; transform:scale(1.4);} }
-    </style>
-  </defs>
-  <g fill="#fff">
-    <circle cx="120" cy="80" r="1.2" class="twinkle"/>
-    <circle cx="420" cy="140" r="1.1"/>
-    <circle cx="800" cy="200" r="1.3" class="twinkle"/>
-    <circle cx="200" cy="500" r="1.2"/>
-    <circle cx="700" cy="600" r="1.3" class="twinkle"/>
-    <circle cx="900" cy="850" r="1.1"/>
-  </g>
-  <g opacity=".5">
-    <circle cx="200" cy="200" r="100" fill="url(#goldGlow)"/>
-    <circle cx="800" cy="700" r="130" fill="url(#goldGlow)"/>
+  <style>
+    .star{ fill:white; opacity:.8; }
+    .twinkle{ animation: twinkle 2s infinite alternate; }
+    @keyframes twinkle{ from{opacity:.3} to{opacity:1; transform:scale(1.3);} }
+    .float{ animation: float 12s infinite linear; }
+    @keyframes float{ from{transform:translateY(0);} to{transform:translateY(-40px);} }
+  </style>
+  <g>
+    <circle cx="100" cy="150" r="1.5" class="star twinkle"/>
+    <circle cx="300" cy="400" r="1.2" class="star"/>
+    <circle cx="600" cy="250" r="1.7" class="star twinkle"/>
+    <circle cx="850" cy="600" r="1.3" class="star"/>
+    <circle cx="400" cy="800" r="1.4" class="star twinkle"/>
+    <circle cx="750" cy="900" r="1.2" class="star"/>
   </g>
 </svg>
 
-<!-- Brillos dorados flotantes -->
+<!-- Brillitos dorados -->
 <svg id="goldGlows" viewBox="0 0 1000 1000" preserveAspectRatio="none">
   <defs>
-    <radialGradient id="gSoft">
-      <stop offset="0%" stop-color="#fff4c1" stop-opacity=".9"/>
-      <stop offset="60%" stop-color="#ffd700" stop-opacity=".25"/>
+    <radialGradient id="goldShine">
+      <stop offset="0%" stop-color="#fff9d9" stop-opacity=".9"/>
+      <stop offset="40%" stop-color="#ffd700" stop-opacity=".5"/>
       <stop offset="100%" stop-color="#ffd700" stop-opacity="0"/>
     </radialGradient>
     <style>
-      .floatGlow{ animation: drift 18s infinite alternate; }
-      @keyframes drift{ from{transform:translate(0,0);} to{transform:translate(30px,-24px);} }
+      .shine{ animation: pulse 4s infinite alternate; }
+      @keyframes pulse{ from{opacity:.4; transform:scale(.8);} to{opacity:1; transform:scale(1.3);} }
     </style>
   </defs>
-  <circle class="floatGlow" cx="180" cy="880" r="90" fill="url(#gSoft)" />
-  <circle class="floatGlow" cx="920" cy="240" r="80" fill="url(#gSoft)" />
+  <circle class="shine" cx="200" cy="700" r="60" fill="url(#goldShine)"/>
+  <circle class="shine" cx="800" cy="300" r="80" fill="url(#goldShine)"/>
 </svg>
 
 <!-- Botón mute -->
@@ -235,3 +227,4 @@
 </script>
 </body>
 </html>
+
